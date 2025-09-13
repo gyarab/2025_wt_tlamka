@@ -12,8 +12,7 @@ a významně přispěl k množství oblastí – od kvantové mechaniky po numer
 
 Více informací: [John von Neumann na Wikipedii](https://cs.wikipedia.org/wiki/John_von_Neumann)
 
-![John von Neumann](images/JohnVonNeumann.jpg)
-
+![JohnVonNeumann](https://github.com/user-attachments/assets/d4cd1cd3-3acc-4732-97b1-75baaed63b68)
 
 *Obrázek: Wikimedia Commons (public domain).*
 
