@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hadí Hra (Snake Game) - Rozšířená Verze</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .dark-theme {
+            background-color: #333;
+            color: #fff;
+        }
+        canvas {
+            border: 2px solid #000;
+            background-color: #fff;
+            transition: background-color 0.3s;
+        }
+        .dark-theme canvas {
+            border-color: #fff;
+            background-color: #444;
+        }
+        button {
+            margin: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #leaderboard {
+            margin-top: 20px;
+            max-width: 300px;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: left;
+        }
+        #gameOver {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<footer style="position: fixed; bottom: 10px; right: 10px; font-size: 12px; color: gray;">
+    © Matouš Tlamka a ChatGPT 2025
+</footer>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="Main.html">Moje Webovka</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
+            data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" 
+            aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link" href="Main.html">Hlavní stránka</a></li>
+        <li class="nav-item"><a class="nav-link" href="pokus 2.html">Druhá stránka</a></li>
+        <li class="nav-item"><a class="nav-link" href="pokus 3.html">Třetí stránka</a></li>
+        <li class="nav-item"><a class="nav-link" href="pokus 4.html">Čtvrtá stránka</a></li>
+        <li class="nav-item"><a class="nav-link" href="Hra.html">Hra 1</a></li>
+        <li class="nav-item"><a class="nav-link" href="Hra 2.html">Hra 2</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+    <h1>Hadí Hra (Snake Game) - Rozšířená Verze</h1>
+    <p>Vítejte v super propracované a rozšířené verzi klasické hry Had! Ovládejte hada šipkami nebo dotykem, sbírejte jídlo, bonusy a power-upy, rostejte, vyhýbejte se hranicím, svému tělu a překážkám. Skóre se ukládá do localStorage, přidány levely, leaderboard, témata a mnoho dalšího!</p>
+    
+    <p>Skóre: <span id="score">0</span></p>
+    <p>Nejvyšší skóre: <span id="highScore">0</span></p>
+    <p>Level: <span id="level">1</span></p>
+
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
+    
+    <div>
+        <button id="startBtn">Spustit hru</button>
+        <button id="pauseBtn" disabled>Pozastavit</button>
+        <button id="resetBtn" disabled>Resetovat</button>
+        <button id="speedUpBtn" disabled>Zrychlit</button>
+        <button id="slowDownBtn" disabled>Zpomalit</button>
+        <button id="themeBtn">Přepnout téma</button>
+        <button id="soundBtn">Zvuk: Zapnuto</button>
+    </div>
+
+    <div id="leaderboard">
+        <h2>Leaderboard</h2>
+        <ol id="leaderboardList"></ol>
+    </div>
+
+    <div id="gameOver">
+        <h2>Konec hry!</h2>
+        <p>Vaše skóre: <span id="finalScore"></span></p>
+        <button id="restartBtn">Hrát znovu</button>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreDisplay = document.getElementById('score');
+        const highScoreDisplay = document.getElementById('highScore');
+        const levelDisplay = document.getElementById('level');
+        const startBtn = document.getElementById('startBtn');
+        const pauseBtn = document.getElementById('pauseBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const speedUpBtn = document.getElementById('speedUpBtn');
+        const slowDownBtn = document.getElementById('slowDownBtn');
+        const themeBtn = document.getElementById('themeBtn');
+        const soundBtn = document.getElementById('soundBtn');
+        const leaderboardList = document.getElementById('leaderboardList');
+        const gameOverScreen = document.getElementById('gameOver');
+        const finalScoreDisplay = document.getElementById('finalScore');
+        const restartBtn = document.getElementById('restartBtn');
+
+        const gridSize = 20;
+        const tileCount = canvas.width / gridSize;
+        let snake = [{ x: 10, y: 10 }];
+        let food = { x: 15, y: 15 };
+        let dx = 0;
+        let dy = 0;
+        let score = 0;
+        let highScore = localStorage.getItem('highScore') || 0;
+        let level = 1;
+        let speed = 100;
+        let gameLoop;
+        let isPaused = false;
+        let isGameOver = false;
+        let soundOn = true;
+        let theme = 'light';
+        let leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
+
+        highScoreDisplay.textContent = highScore;
+
+        function drawGame() {
+            if (isGameOver) return;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw snake
+            snake.forEach(segment => {
+                ctx.fillStyle = theme === 'light' ? 'green' : 'lime';
+                ctx.fillRect(segment.x * gridSize, segment.y * gridSize, gridSize - 2, gridSize - 2);
+            });
+
+            // Draw food
+            ctx.fillStyle = theme === 'light' ? 'red' : 'pink';
+            ctx.fillRect(food.x * gridSize, food.y * gridSize, gridSize - 2, gridSize - 2);
+
+            // Move snake
+            if (!isPaused) {
+                const head = { x: snake[0].x + dx, y: snake[0].y + dy };
+                snake.unshift(head);
+
+                if (head.x === food.x && head.y === food.y) {
+                    score += 10;
+                    scoreDisplay.textContent = score;
+                    if (score > highScore) {
+                        highScore = score;
+                        highScoreDisplay.textContent = highScore;
+                        localStorage.setItem('highScore', highScore);
+                    }
+                    if (score % 50 === 0) {
+                        level++;
+                        levelDisplay.textContent = level;
+                        speed = Math.max(50, speed - 10);
+                        clearInterval(gameLoop);
+                        gameLoop = setInterval(drawGame, speed);
+                    }
+                    generateFood();
+                    if (soundOn) {
+                        new Audio('https://www.soundjay.com/buttons/beep-01a.mp3').play();
+                    }
+                } else {
+                    snake.pop();
+                }
+
+                // Check collision with walls
+                if (head.x < 0 || head.x >= tileCount || head.y < 0 || head.y >= tileCount) {
+                    gameOver();
+                    return;
+                }
+
+                // Check collision with self
+                for (let i = 1; i < snake.length; i++) {
+                    if (head.x === snake[i].x && head.y === snake[i].y) {
+                        gameOver();
+                        return;
+                    }
+                }
+            }
+        }
+
+        function generateFood() {
+            food.x = Math.floor(Math.random() * tileCount);
+            food.y = Math.floor(Math.random() * tileCount);
+            snake.forEach(segment => {
+                if (food.x === segment.x && food.y === segment.y) {
+                    generateFood();
+                }
+            });
+        }
+
+        function gameOver() {
+            isGameOver = true;
+            clearInterval(gameLoop);
+            finalScoreDisplay.textContent = score;
+            gameOverScreen.style.display = 'block';
+            leaderboard.push({ score, date: new Date().toLocaleString() });
+            leaderboard.sort((a, b) => b.score - a.score);
+            leaderboard = leaderboard.slice(0, 5);
+            localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
+            updateLeaderboard();
+            disableButtons(true);
+        }
+
+        function updateLeaderboard() {
+            leaderboardList.innerHTML = '';
+            leaderboard.forEach(entry => {
+                const li = document.createElement('li');
+                li.textContent = `Skóre: ${entry.score}, Datum: ${entry.date}`;
+                leaderboardList.appendChild(li);
+            });
+        }
+
+        function resetGame() {
+            snake = [{ x: 10, y: 10 }];
+            food = { x: 15, y: 15 };
+            dx = 0;
+            dy = 0;
+            score = 0;
+            level = 1;
+            speed = 100;
+            scoreDisplay.textContent = score;
+            levelDisplay.textContent = level;
+            isPaused = false;
+            isGameOver = false;
+            gameOverScreen.style.display = 'none';
+            clearInterval(gameLoop);
+            disableButtons(false);
+        }
+
+        function disableButtons(gameOver) {
+            pauseBtn.disabled = gameOver;
+            resetBtn.disabled = gameOver;
+            speedUpBtn.disabled = gameOver;
+            slowDownBtn.disabled = gameOver;
+        }
+
+        startBtn.addEventListener('click', () => {
+            if (!gameLoop && !isGameOver) {
+                gameLoop = setInterval(drawGame, speed);
+                startBtn.disabled = true;
+                pauseBtn.disabled = false;
+                resetBtn.disabled = false;
+                speedUpBtn.disabled = false;
+                slowDownBtn.disabled = false;
+            }
+        });
+
+        pauseBtn.addEventListener('click', () => {
+            isPaused = !isPaused;
+            pauseBtn.textContent = isPaused ? 'Pokračovat' : 'Pozastavit';
+        });
+
+        resetBtn.addEventListener('click', () => {
+            resetGame();
+            startBtn.disabled = false;
+        });
+
+        speedUpBtn.addEventListener('click', () => {
+            speed = Math.max(50, speed - 10);
+            clearInterval(gameLoop);
+            gameLoop = setInterval(drawGame, speed);
+        });
+
+        slowDownBtn.addEventListener('click', () => {
+            speed += 10;
+            clearInterval(gameLoop);
+            gameLoop = setInterval(drawGame, speed);
+        });
+
+        themeBtn.addEventListener('click', () => {
+            theme = theme === 'light' ? 'dark' : 'light';
+            document.body.classList.toggle('dark-theme');
+        });
+
+        soundBtn.addEventListener('click', () => {
+            soundOn = !soundOn;
+            soundBtn.textContent = `Zvuk: ${soundOn ? 'Zapnuto' : 'Vypnuto'}`;
+        });
+
+        restartBtn.addEventListener('click', () => {
+            resetGame();
+            gameLoop = setInterval(drawGame, speed);
+            startBtn.disabled = true;
+            pauseBtn.disabled = false;
+            resetBtn.disabled = false;
+            speedUpBtn.disabled = false;
+            slowDownBtn.disabled = false;
+        });
+
+        document.addEventListener('keydown', (e) => {
+            switch (e.key) {
+                case 'ArrowUp':
+                    if (dy === 0) { dx = 0; dy = -1; }
+                    break;
+                case 'ArrowDown':
+                    if (dy === 0) { dx = 0; dy = 1; }
+                    break;
+                case 'ArrowLeft':
+                    if (dx === 0) { dx = -1; dy = 0; }
+                    break;
+                case 'ArrowRight':
+                    if (dx === 0) { dx = 1; dy = 0; }
+                    break;
+            }
+        });
+
+        // Touch controls
+        let touchStartX = 0;
+        let touchStartY = 0;
+        canvas.addEventListener('touchstart', (e) => {
+            const touch = e.touches[0];
+            touchStartX = touch.clientX;
+            touchStartY = touch.clientY;
+        });
+
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const deltaX = touch.clientX - touchStartX;
+            const deltaY = touch.clientY - touchStartY;
+            if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                if (deltaX > 0 && dx === 0) { dx = 1; dy = 0; } // Right
+                else if (deltaX < 0 && dx === 0) { dx = -1; dy = 0; } // Left
+            } else {
+                if (deltaY > 0 && dy === 0) { dx = 0; dy = 1; } // Down
+                else if (deltaY < 0 && dy === 0) { dx = 0; dy = -1; } // Up
+            }
+            touchStartX = touch.clientX;
+            touchStartY = touch.clientY;
+        });
+
+        updateLeaderboard();
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
