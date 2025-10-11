@@ -15,7 +15,7 @@ Repozitář aktuálně obsahuje následující části:
   - stručný životopis,
   - hlavní přínosy
 
-- **`/prvni_web`** – adresář obsahující první samostatný **HTML projekt**, vytvořený jako úvod do tvorby webových stránek.  
+- **`prvni_web/`** – adresář obsahující první samostatný **HTML projekt**, vytvořený jako úvod do tvorby webových stránek.  
 
 ---
 
