@@ -1,24 +1,28 @@
-# John von Neumann
+# 2025 WT Tlamka
 
-John von Neumann (1903–1957) byl maďarsko-americký matematik, fyzik a průkopník počítačové vědy. 
-Patřil k tvůrcům teorie her, architektury moderních počítačů (tzv. von Neumann architecture) 
-a významně přispěl k množství oblastí – od kvantové mechaniky po numerické metody.
+Tento repozitář slouží jako školní projekt pro předmět **Webové technologie** (2. ročník), školní rok **2025/2026**.
 
-## Hlavní přínosy
-- Spoluzakladatel teorie her.
-- Autor *von Neumannovy architektury* — základu moderních počítačů.
-- Přispěl k matematické logice a kvantové mechanice.
-- Spolupracoval na významných vědeckých projektech ve 40. letech.
+Cílem repozitáře je dokumentovat a uchovat všechny výstupy z hodin, projekty a materiály spojené s výukou webového vývoje — od teorie po praktické ukázky.
 
-Více informací: [John von Neumann na Wikipedii](https://cs.wikipedia.org/wiki/John_von_Neumann)
+---
 
-![JohnVonNeumann](https://github.com/user-attachments/assets/d4cd1cd3-3acc-4732-97b1-75baaed63b68)
+## Obsah repozitáře
 
-*Obrázek: Wikimedia Commons (public domain).*
+Repozitář aktuálně obsahuje následující části:
 
-## Časová osa
-| Rok | Událost |
-|-----|---------|
-| 1903 | Narození |
-| 1940s | Vývoj architektury počítačů |
-| 1957 | Úmrtí |
+- **`referat.md`** – zpracovaný referát na téma **John von Neumann**, průkopník moderní informatiky, teorie her a architektury počítačů.  
+  Soubor obsahuje:
+  - stručný životopis,
+  - hlavní přínosy
+
+- **`/prvni_web`** – adresář obsahující první samostatný **HTML projekt**, vytvořený jako úvod do tvorby webových stránek.  
+
+---
+
+## Autor
+
+**Matouš Tlamka**  
+Student 2. ročníku  
+Gymnázium, Praha 6, Arabská 14 – předmět *Webové technologie (WT)*  
+Školní rok 2025/26
+
