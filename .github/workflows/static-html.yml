@@ -1,0 +1,34 @@
+name: Deploy static content to Pages
+
+on:
+  push:
+    branches: ['main']  # Nebo 'master', pokud máš tu branch – změň podle své default branch
+  workflow_dispatch:  # Umožní manuální spuštění
+
+# Grant access to the gh-pages branch
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: './microsite'  # Zde specifikuješ tvůj adresář – deployne obsah microsite jako root
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
