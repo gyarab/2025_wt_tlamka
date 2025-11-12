@@ -2,10 +2,10 @@ name: Deploy static content to Pages
 
 on:
   push:
-    branches: ['main']  # Nebo 'master', pokud máš tu branch – změň podle své default branch
-  workflow_dispatch:  # Umožní manuální spuštění
+    branches: ['main']  
+  workflow_dispatch:  
 
-# Grant access to the gh-pages branch
+
 permissions:
   contents: read
   pages: write
@@ -27,7 +27,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4
         with:
-          path: './microsite'  # Zde specifikuješ tvůj adresář – deployne obsah microsite jako root
+          path: './microsite'  
 
       - name: Deploy to GitHub Pages
         id: deployment
