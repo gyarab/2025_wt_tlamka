@@ -13,9 +13,13 @@ Repozitář aktuálně obsahuje následující části:
   - stručný životopis,
   - hlavní přínosy
 
+- **`color.md`** – zpracovaný referát na téma Psychologie barev – **logo společnosti Apple**, která definuje standardy prémiového designu a inovací.
+
 - **`prvni_web/`** – adresář obsahující první samostatný **HTML projekt**, vytvořený jako úvod do tvorby webových stránek.
 
 - **`microsite/`** – adresář obsahující microsite (soubor **`index.html`**) a obrázky, které soubor využívá.
+
+- **`jsgame/`** – adresář obsahující jednoduchou hru na hádání čísel.
 
 ---
 
