@@ -20,6 +20,8 @@ Repozitář aktuálně obsahuje následující části:
 - **`microsite/`** – adresář obsahující microsite (soubor **`index.html`**) a obrázky, které soubor využívá.
 
 - **`jsgame/`** – adresář obsahující jednoduchou hru na hádání čísel.
+  
+- **`zelva/`** – adresář obsahující jednoduchou úlohu na vykreslování domečku jedním tahem v pythonu.
 
 ---
 
