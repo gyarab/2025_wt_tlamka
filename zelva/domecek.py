@@ -1,97 +1,74 @@
 import turtle
-from math import sqrt
-import time
+from math import sqrt  
+from random import randint
 
-turtle.bgcolor("#1a1a1a") 
+
+
+turtle.bgcolor("black")
 turtle.title("Věčný návrat želvy")
 
 t = turtle.Turtle()
 t.shape("classic") 
 t.pensize(2)
-BARVA_DOMU = "#FFFFFF" 
-BARVA_TEXTU = "#FF8C00" 
+t.pencolor("white")
+t.penup()
+t.goto(-60, 150)
+t.pendown()
 
-def domecek_jednim_tahem(a):
-    uhlopricka = a * sqrt(2)
-    strecha = (a * sqrt(2)) / 2
+def domecek(a):
+    d = a * sqrt(2)
+    s = d / 2
 
-    # 1 Podlaha
+    # spodní hrana
     t.forward(a)
-    # 2 Pravá stěna
+
+    # prava
     t.left(90)
     t.forward(a)
-    # 3 Střecha pravá
+
+    # strecha
     t.left(45)
-    t.forward(strecha)
-    # 4 Střecha levá
+    t.forward(s)
     t.left(90)
-    t.forward(strecha)
-    # 5 Levá stěna
+    t.forward(s)
+
+    # leva 
     t.left(45)
     t.forward(a)
-    # 6 Uhlopříčka nahoru
+
+    # křížem krážem
     t.left(135)
-    t.forward(uhlopricka)
-    # 7 Strop
+    t.forward(d)
     t.left(135)
     t.forward(a)
-    # 8Uhlopříčka dolů
     t.left(135)
-    t.forward(uhlopricka)
-    
+    t.forward(d)
+    # konec
     t.left(45)
 
-def zrozeni_iluze():
-    t.showturtle()
-    t.speed(3) 
-    t.pencolor(BARVA_DOMU)
-    t.pensize(3) 
-    
-    t.penup()
-    t.goto(-100, -50) 
-    t.pendown()
+pocet = 12
+velikost = randint(30, 70)
+        
+for i in range(pocet):
+    domecek(randint(30, 70))
+    t.right(360 / pocet)
 
-    domecek_jednim_tahem(200)
-    
-    time.sleep(1.0)
 
-def prechod_do_reality():
-    t.penup()
-    t.clear() 
-    t.goto(-40, 180) 
-    t.setheading(0)
-    time.sleep(0.5)
+t.hideturtle()
+t.penup()
+t.pencolor("#FF8C00")
 
-def planeta_vecneho_navratu(pocet_domu):
-    t.speed(0)
-    t.pencolor(BARVA_DOMU)
-    t.pensize(2)
-    velikost = 50
-    uhel_otoceni = 360 / pocet_domu
-    t.pendown()
+y = -160
+t.goto(0, y)
+t.write("„Tento život... budeš muset žít ještě jednou",
+        align="center", font=("Arial", 14, "italic"))
 
-    for _ in range(pocet_domu):
-        domecek_jednim_tahem(velikost)
-        t.right(uhel_otoceni)
-def zjeveni_pravdy():
-    t.hideturtle() 
-    t.penup()
-    t.pencolor(BARVA_TEXTU)
+t.goto(0, y - 30)
+t.write("a ještě nesčíslněkrát...“",
+        align="center", font=("Arial", 14, "italic"))
 
-    y_start = -150 
-    t.goto(0, y_start) 
-    font_citatu = ("Georgia", 16, "italic")
-    t.write("„Tento život... budeš muset žít ještě jednou", align="center", font=font_citatu)
-    
-    t.goto(0, y_start - 35)
-    t.write("a ještě nespočetněkrát...“", align="center", font=font_citatu)
+t.goto(0, y - 80)
+t.write("- Friedrich Nietzsche",
+        align="center", font=("Arial", 12, "bold"))
 
-    t.goto(0, y_start - 100) 
-    font_podpisu = ("Arial", 14, "bold")
-    t.write("- Friedrich Nietzsche", align="center", font=font_podpisu)
-
-zrozeni_iluze()
-prechod_do_reality()
-planeta_vecneho_navratu(12)
-zjeveni_pravdy()
 turtle.exitonclick()
