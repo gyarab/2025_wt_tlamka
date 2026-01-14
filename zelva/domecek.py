@@ -2,8 +2,6 @@ import turtle
 from math import sqrt  
 from random import randint
 
-
-
 turtle.bgcolor("black")
 turtle.title("Věčný návrat želvy")
 
@@ -18,24 +16,19 @@ t.pendown()
 def domecek(a):
     d = a * sqrt(2)
     s = d / 2
-
     # spodní hrana
     t.forward(a)
-
     # prava
     t.left(90)
     t.forward(a)
-
     # strecha
     t.left(45)
     t.forward(s)
     t.left(90)
     t.forward(s)
-
     # leva 
     t.left(45)
     t.forward(a)
-
     # křížem krážem
     t.left(135)
     t.forward(d)
@@ -62,11 +55,9 @@ y = -160
 t.goto(0, y)
 t.write("„Tento život... budeš muset žít ještě jednou",
         align="center", font=("Arial", 14, "italic"))
-
 t.goto(0, y - 30)
 t.write("a ještě nesčíslněkrát...“",
         align="center", font=("Arial", 14, "italic"))
-
 t.goto(0, y - 80)
 t.write("- Friedrich Nietzsche",
         align="center", font=("Arial", 12, "bold"))
