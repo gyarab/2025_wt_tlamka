@@ -39,13 +39,13 @@ def domecek(a):
     # konec
     t.left(45)
 
-pocet = 12
-velikost = randint(30, 70)
-        
-for i in range(pocet):
-    domecek(randint(30, 70))
-    t.right(360 / pocet)
+def zemekoule(pocet, velikost):                
+        for i in range(pocet):
+            domecek(velikost)
+            t.right(360 / pocet)
 
+
+zemekoule(12, randint(30, 70))
 
 t.hideturtle()
 t.penup()
